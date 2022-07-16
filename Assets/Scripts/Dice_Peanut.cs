@@ -41,7 +41,7 @@ public class Dice_Peanut : MonoBehaviour
                 //Debug.Log(angles[sideIndex]);
                 
             if (angles[i] == tempAngles[0]){
-                Debug.Log(sideIndex);
+                //Debug.Log(sideIndex);
             } 
         }
         return sideIndex;

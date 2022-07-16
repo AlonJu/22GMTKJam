@@ -10,8 +10,11 @@ public class ClickRaycast : MonoBehaviour
     private InputHandler inputHandler;
     [SerializeField]
     public Camera cam;
+    public Transform self;
     private RaycastHit rayHit;
     public float grabRange = 100.0f;
+    public float boxWidth = 10.0f;
+    public LayerMask dice;
     bool didHit;
 
     void Start()
@@ -28,10 +31,20 @@ public class ClickRaycast : MonoBehaviour
 
         }
     }
-    private void OnDrawGizmos() {
+    private void OnDrawGizmos() 
+    {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward*grabRange);
         //Gizmos.DrawWireCube(cam.transform.position+cam.transform.forward*(grabRange/2), new Vector3(1.0f, 1.0f, grabRange));
+    }
+    public RayHitData PickUp()
+    {
+        RayHitData hitData = new RayHitData();
+        didHit = Physics.BoxCast(self.position, new Vector3(boxWidth, 0.1f, 0.1f), new Vector3(0.0f, cam.transform.rotation.y, 0.0f), out rayHit, Quaternion.Euler(Vector3.up), grabRange, dice);
+        hitData.hitLocation = rayHit.point;
+        hitData.hitObject = rayHit.transform.gameObject;
+        
+        return hitData;
     }
     public RayHitData CastReticle(int type)
     { // casts a ray at the reticle and returns rayhitdata
@@ -46,7 +59,7 @@ public class ClickRaycast : MonoBehaviour
                 return rayHitData;
             case 1: // picking up the dice
                 //tell me where it hit, and if it hit a dice
-                didHit = Physics.Raycast(cam.transform.position, cam.transform.forward, out rayHit, grabRange, 0);
+                //didHit = Physics.Raycast(cam.transform.position, cam.transform.forward, out rayHit, grabRange, 0);
                 didHit = Physics.BoxCast(cam.transform.position, new Vector3(0.2f, 0.2f, 0.2f), cam.transform.forward, out rayHit, cam.transform.rotation, grabRange);
                 if (didHit)
                     Debug.Log("HIT!");

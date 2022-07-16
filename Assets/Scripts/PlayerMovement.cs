@@ -76,8 +76,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
         [SerializeField]
         private float jumpSpeed = 0.0f;
-        [SerializeField]
-        private float jumpBoost = 0.0f, ledgeBoostSpeed = 0.0f, airBrake = 0.0f, airSpeed = 0.0f;
+        //[SerializeField]
+        //private float jumpBoost = 0.0f, ledgeBoostSpeed = 0.0f, airBrake = 0.0f, airSpeed = 0.0f;
     void Jump(){
         //jumping system with 5 features -- a double jump, 
         //a vertical boost at the zenith of your jump, 
@@ -106,18 +106,30 @@ public class PlayerMovement : MonoBehaviour
     //Dice interactions
     private ClickRaycast clickRay;
     public DicePhysics diceP;
-    void ClickEvent(){
-        ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
-        rayData = clickRay.CastReticle(1);
-        if (rayData.hitLocation != Vector3.zero){
-            Debug.Log("YES!!!!");
-        }
-        if (rayData.hitObject.transform.name == "DiceTest"){
-            diceP.hit = true;
-            diceP.hitVector = clickRay.cam.transform.forward * 5.0f;
-            Debug.Log("DICE HIT");
-        } else {
+    void ClickEvent(bool clicked){
+        if(clicked){
+            ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
+            /*
+            rayData = clickRay.CastReticle(1);
+            if (rayData.hitLocation != Vector3.zero){
+                Debug.Log("YES!!!!");
+            }
+            if (rayData.hitObject.transform.name == "DiceTest"){
+                diceP.hit = true;
+                diceP.hitVector = clickRay.cam.transform.forward * 5.0f;
+                Debug.Log("DICE HIT");
+            } else {
 
+            }*/
+            rayData = clickRay.PickUp();
+            if (rayData.hitLocation != Vector3.zero){
+                Debug.Log("YES!!!!");
+            }
+            if (rayData.hitObject.transform.name == "DiceTest"){
+                Debug.Log("DICE HIT");
+            } else {
+
+            }
         }
     }
 
@@ -132,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
      Move(speed);   
      Jump();
      IsGrounded();
+     ClickEvent(inputHandler.left_mInput);
      rigidBody.AddForce(moveVector, ForceMode.Impulse); 
     }
    
