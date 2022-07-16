@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
         inputHandler = GetComponent<InputHandler>();    
         diceP = GetComponent<DicePhysics>();
         self = GetComponent<Transform>();
+        winch = GetComponent<Transform>();
     }
     //Collisions
 
@@ -69,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 mInput = inputHandler.mInput;  
         moveVector = new Vector3(mInput.x * speed, moveVector.y, mInput.y * speed); // basically translate the vector2 into a vector 3 for horizontal movement  
         moveVector *= Time.deltaTime;   
-        moveVector = camera.rotation * moveVector;
+        moveVector = cam.rotation * moveVector;
     }
 
     #endregion
@@ -106,23 +107,48 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     //Dice interactions
+    #region Dice
     [Header("Dice")]
     public GameObject currentDice;
     private Rigidbody diceRB;
 
     [Range(0.0f, 20.0f)][SerializeField]
     private float diceOffset;
+    public float throwSpeed;
     private ClickRaycast clickRay;
     public DicePhysics diceP;
+    public Transform winch;
     void HoldDice(GameObject dice){
         if (dice){
             dice.transform.position = self.position + new Vector3(0.0f, diceOffset, 0.0f);
             diceRB = dice.GetComponent<Rigidbody>();
             diceRB.useGravity = false;
             diceRB.isKinematic = true;
-            Vector3 _camRot = camera.transform.rotation.eulerAngles;
+            Vector3 _camRot = cam.transform.rotation.eulerAngles;
             dice.transform.rotation = Quaternion.Euler(new Vector3(0.0f, _camRot.y, 0.0f));
         }
+    }
+    void ThrowDice(Vector3 targetPoint, GameObject dice){
+        if (dice){
+            //throw dice in direction of pointer
+            //
+            float xAngle = CalculateDiceXAngle(targetPoint, throwSpeed, dice);
+            Quaternion angleQuat = Quaternion.AngleAxis(xAngle, Vector3.right);
+            Vector3 angleVector = angleQuat.eulerAngles;
+
+            diceRB.useGravity = true;
+            diceRB.isKinematic = false;
+            diceRB.AddForce(new Vector3(angleVector.x, cam.transform.rotation.y, 0.0f), ForceMode.Impulse);
+            diceRB = null;
+            dice = null;
+        }
+    }
+    public float CalculateDiceXAngle(Vector3 targetPoint, float shotSpeed, GameObject dice){
+        float gravity = 6.67f;
+
+        float sinAngle = (gravity * Vector3.Distance(dice.transform.position, targetPoint))/(shotSpeed*shotSpeed);
+        float finalAngle = Mathf.Asin(sinAngle);
+        return finalAngle;
     }
     void ClickEvent(bool clicked){
         if(clicked){
@@ -142,17 +168,16 @@ public class PlayerMovement : MonoBehaviour
             rayData = clickRay.PickUp();
             if (rayData.hitLocation != Vector3.zero){
                 Debug.Log("YES!!!!");
-            }
-            if (rayData.hitObject.transform.name == "DiceTest"){
-                Debug.Log("DICE HIT");
-            } else {
-
+                if (currentDice){
+                    ThrowDice(rayData.hitLocation, currentDice);
+                }
             }
         }
     }
+    #endregion
 
-    //Camera
-    public Transform camera;
+    //cam
+    public Transform cam;
     //Utilities
     [Header("Misc.")]
     public int health;
