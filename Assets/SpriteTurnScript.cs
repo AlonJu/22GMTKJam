@@ -1,0 +1,40 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SpriteTurnScript : MonoBehaviour
+{
+    //take the camera transform
+    public Transform cam;
+
+    public Transform self;
+
+    public Transform player;
+
+    [SerializeField]
+    private float rotationGuideAmount = 0.1f;
+    // Start is called before the first frame update
+    void Start()
+    {
+        self = GetComponent<Transform>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Quaternion camRotation = cam.rotation;
+        Vector3 camRotationVector = camRotation.eulerAngles;
+
+        Quaternion  selfRotation = self.rotation;
+        Vector3 selfRotationVector = selfRotation.eulerAngles;
+        if (self.position.y < player.position.y){
+            float rotationGuide = Vector3.Angle(self.position, player.position);
+            selfRotationVector = new Vector3(rotationGuide * rotationGuideAmount, camRotationVector.y, selfRotationVector.z);
+        } else{
+            selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);
+        }
+
+        self.SetPositionAndRotation(self.position, Quaternion.Euler(selfRotationVector));
+
+    }
+}

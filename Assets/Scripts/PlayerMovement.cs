@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
         hitbox = GetComponent<CapsuleCollider>();  
         //groundBox = GetComponent<BoxCollider>(); 
         inputHandler = GetComponent<InputHandler>();    
+        diceP = GetComponent<DicePhysics>();
     }
     //Collisions
 
@@ -38,12 +39,12 @@ public class PlayerMovement : MonoBehaviour
            
            
             _slopeAngle = (Vector3.Angle(rayHit.normal, transform.forward) - 90);
-            Debug.Log("Grounded on " + rayHit.transform.name);
-            Debug.Log("\nSlope Angle: " + _slopeAngle.ToString("N0") + "°");
+            //Debug.Log("Grounded on " + rayHit.transform.name);
+            //Debug.Log("\nSlope Angle: " + _slopeAngle.ToString("N0") + "°");
             grounded = true;
             jumpLimit =2;
         } else {
-            Debug.Log("Not Grounded");
+            //Debug.Log("Not Grounded");
             grounded = false;
             jumpLimit = 0;
         }
@@ -89,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded==true && jumpLimit>0){
             //start the jump
             if (jInput != 0.0f){
-                Debug.Log(jInput);
+                //Debug.Log(jInput);
                 moveVector += new Vector3(moveVector.x, jumpSpeed, moveVector.z);
                 jumpLimit--;
                 
@@ -103,6 +104,22 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     //Dice interactions
+    private ClickRaycast clickRay;
+    public DicePhysics diceP;
+    void ClickEvent(){
+        ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
+        rayData = clickRay.CastReticle(1);
+        if (rayData.hitLocation != Vector3.zero){
+            Debug.Log("YES!!!!");
+        }
+        if (rayData.hitObject.transform.name == "DiceTest"){
+            diceP.hit = true;
+            diceP.hitVector = clickRay.cam.transform.forward * 5.0f;
+            Debug.Log("DICE HIT");
+        } else {
+
+        }
+    }
 
     //Camera
     public Transform camera;
@@ -110,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
         void FixedUpdate() 
     {
-        Debug.Log(jumpLimit);
+        //Debug.Log(jumpLimit);
         //use states to control velocity based on whetehr or not youre grounded
      Move(speed);   
      Jump();

@@ -13,15 +13,13 @@ public class CameraTrack : MonoBehaviour //Tracks and aims the camera around the
     float targetAngle, angle;
     float maxCamSpeed = 0.15f;
     float camAccel = 0.01f;
-    float camSpeed = 0f;
 
     void Start (){
     }
 
-    void Update()
+    void FixedUpdate()
     {
-                transform.localPosition = new Vector3(tracked.transform.localPosition.x,tracked.transform.localPosition.y,tracked.transform.localPosition.z); 
-                camSpeed = 0f;     
+                transform.localPosition = new Vector3(tracked.transform.localPosition.x,tracked.transform.localPosition.y,tracked.transform.localPosition.z);    
                 //im surprised by how little of this code matters now that everything is mouse controlled
     }      
         
