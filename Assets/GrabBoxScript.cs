@@ -10,6 +10,8 @@ public class GrabBoxScript : MonoBehaviour
     public Transform self;
 
     public Transform player;
+    public GameObject playerObj;
+    public PlayerMovement playerMovement;
 
     [SerializeField]
     private float rotationGuideAmount = 0.1f;
@@ -17,6 +19,7 @@ public class GrabBoxScript : MonoBehaviour
     void Start()
     {
         self = GetComponent<Transform>();
+        playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
@@ -35,5 +38,11 @@ public class GrabBoxScript : MonoBehaviour
         self.SetPositionAndRotation(player.position, Quaternion.Euler(selfRotationVector));
         self.position = player.position;
 
+    }
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Dice"){
+            //player will pick it up.
+            playerMovement.currentDice = other.gameObject;
+        }
     }
 }

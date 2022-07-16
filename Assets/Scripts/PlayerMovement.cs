@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Transform self;
     private GameObject gBox;
     private InputHandler inputHandler;
     // Start is called before the first frame update
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
         //groundBox = GetComponent<BoxCollider>(); 
         inputHandler = GetComponent<InputHandler>();    
         diceP = GetComponent<DicePhysics>();
+        self = GetComponent<Transform>();
     }
     //Collisions
 
@@ -104,8 +106,24 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     //Dice interactions
+    [Header("Dice")]
+    public GameObject currentDice;
+    private Rigidbody diceRB;
+
+    [Range(0.0f, 20.0f)][SerializeField]
+    private float diceOffset;
     private ClickRaycast clickRay;
     public DicePhysics diceP;
+    void HoldDice(GameObject dice){
+        if (dice){
+            dice.transform.position = self.position + new Vector3(0.0f, diceOffset, 0.0f);
+            diceRB = dice.GetComponent<Rigidbody>();
+            diceRB.useGravity = false;
+            diceRB.isKinematic = true;
+            Vector3 _camRot = camera.transform.rotation.eulerAngles;
+            dice.transform.rotation = Quaternion.Euler(new Vector3(0.0f, _camRot.y, 0.0f));
+        }
+    }
     void ClickEvent(bool clicked){
         if(clicked){
             ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
@@ -136,6 +154,10 @@ public class PlayerMovement : MonoBehaviour
     //Camera
     public Transform camera;
     //Utilities
+    [Header("Misc.")]
+    public int health;
+
+    public int maxHealth;
 
         void FixedUpdate() 
     {
@@ -145,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
      Jump();
      IsGrounded();
      ClickEvent(inputHandler.left_mInput);
+     HoldDice(currentDice);
      rigidBody.AddForce(moveVector, ForceMode.Impulse); 
     }
    

@@ -10,6 +10,9 @@ public class SpriteTurnScript : MonoBehaviour
     public Transform self;
 
     public Transform player;
+    public bool playerSprite = false;
+    [Range(0.0f, 20.0f)]
+    public float offset = 0.0f;
 
     [SerializeField]
     private float rotationGuideAmount = 0.1f;
@@ -27,14 +30,19 @@ public class SpriteTurnScript : MonoBehaviour
 
         Quaternion  selfRotation = self.rotation;
         Vector3 selfRotationVector = selfRotation.eulerAngles;
-        if (self.position.y < player.position.y){
-            float rotationGuide = Vector3.Angle(self.position, player.position);
-            selfRotationVector = new Vector3(rotationGuide * rotationGuideAmount, camRotationVector.y, selfRotationVector.z);
-        } else{
-            selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);
-        }
-
+        if (!playerSprite){
+            if (self.position.y < player.position.y){
+                float rotationGuide = Vector3.Angle(self.position, player.position);
+                selfRotationVector = new Vector3(selfRotationVector.x + rotationGuide * rotationGuideAmount, camRotationVector.y, selfRotationVector.z);
+            } else{
+                selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);
+            }
         self.SetPositionAndRotation(self.position, Quaternion.Euler(selfRotationVector));
+        }else {
+            selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);
 
+            self.SetPositionAndRotation(self.position, Quaternion.Euler(selfRotationVector));
+            self.position = player.position + new Vector3(0.0f, offset, 0.0f);
+        }
     }
 }
