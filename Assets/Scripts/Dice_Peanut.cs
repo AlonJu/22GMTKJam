@@ -18,7 +18,7 @@ public class Dice_Peanut : MonoBehaviour
 
     public bool CheckSides()
     {
-        if(transform.up == 0,1,0)
+        if(transform.up == new Vector3(0,1,0))
         Debug.Log("Detected");
         /*
         //z

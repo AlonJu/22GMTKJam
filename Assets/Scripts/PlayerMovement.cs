@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     }
     //Collisions
 
-    private Rigidbody rigidBody;
+    public Rigidbody rigidBody;
     private CapsuleCollider hitbox;
     [SerializeField]
     private BoxCollider groundBox;
@@ -24,12 +24,11 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask ground;
     private RaycastHit rayHit;
     public float groundedFactor= 0.25f;
-    private bool grounded=false;
+    public bool grounded=false;
     private float _slopeAngle;
 
     private int jumpLimit=2;
     void IsGrounded(){
-        RaycastHit hit;
         if (Physics.BoxCast( new Vector3(groundBox.center.x , groundBox.center.y  , groundBox.center.z  ),
                             new Vector3((groundBox.size.x * 0.9f), groundBox.size.y, (groundBox.size.z * 0.9f)) * 0.5f,
                             -Vector3.up,
@@ -58,15 +57,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Horizontal Movement")][Range(0.0f,20.0f)]
         [SerializeField]
         private float speed = 0.0f;
-
+        public float turnFastTime = 1.0f;
+        public float targetAngle;
+        float angle;
         private Vector3 moveVector;
     void Move(float speed)
     {
-        Vector2 mInput = inputHandler.mInput;
+        Vector2 mInput = inputHandler.mInput;  
         moveVector = new Vector3(mInput.x * speed, moveVector.y, mInput.y * speed); // basically translate the vector2 into a vector 3 for horizontal movement  
         moveVector *= Time.deltaTime;   
-
-        //rigidBody.AddForce(moveVector, ForceMode.Impulse);
+        moveVector = camera.rotation * moveVector;
     }
 
     #endregion
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
     //Dice interactions
 
     //Camera
-
+    public Transform camera;
     //Utilities
 
         void FixedUpdate() 
