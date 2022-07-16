@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
+    private GameObject gBox;
     private InputHandler inputHandler;
     // Start is called before the first frame update
     void Start()
@@ -24,8 +24,10 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask ground;
     private RaycastHit rayHit;
     public float groundedFactor= 0.25f;
-    private bool grounded;
+    private bool grounded=false;
     private float _slopeAngle;
+
+    private int jumpLimit=2;
     void IsGrounded(){
         RaycastHit hit;
         if (Physics.BoxCast( new Vector3(groundBox.center.x , groundBox.center.y  , groundBox.center.z  ),
@@ -34,13 +36,17 @@ public class PlayerMovement : MonoBehaviour
                             out rayHit,
                             groundBox.transform.rotation,
                             groundBox.size.y * groundedFactor)) {
+           
+           
             _slopeAngle = (Vector3.Angle(rayHit.normal, transform.forward) - 90);
             Debug.Log("Grounded on " + rayHit.transform.name);
             Debug.Log("\nSlope Angle: " + _slopeAngle.ToString("N0") + "°");
             grounded = true;
+            jumpLimit =2;
         } else {
             Debug.Log("Not Grounded");
             grounded = false;
+            jumpLimit = 0;
         }
     }
     private void OnDrawGizmos() {
@@ -80,13 +86,16 @@ public class PlayerMovement : MonoBehaviour
         //*all of these features are optional -- let's get the basic player controller down first
         float jInput = inputHandler.jInput;
 
-        if (grounded){
+        if (grounded==true && jumpLimit>0){
             //start the jump
             if (jInput != 0.0f){
                 Debug.Log(jInput);
                 moveVector += new Vector3(moveVector.x, jumpSpeed, moveVector.z);
+                jumpLimit--;
+                
             }
         }else {
+            moveVector += new Vector3(moveVector.x, 0.0f, moveVector.z);
           //moveVector.y -= (1 - jInput); //variable jump
         }
 
@@ -101,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
         void FixedUpdate() 
     {
+        Debug.Log(jumpLimit);
         //use states to control velocity based on whetehr or not youre grounded
      Move(speed);   
      Jump();
