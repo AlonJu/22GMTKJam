@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 4695635839477600989}
   - component: {fileID: 4695635839477600988}
   - component: {fileID: 4695635839477600935}
+  - component: {fileID: -1114375232221917088}
   m_Layer: 0
-  m_Name: DiceTest
+  m_Name: Pickup Dice
   m_TagString: Dice
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +115,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   self: {fileID: 4695635839477600985}
+  diceType: White
   sideIndex: 0
+  returnNumber: 0
 --- !u!114 &4695635839477600989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,4 +161,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df2aa81e09c1304882b070c17897223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  diceIndex: {fileID: 0}
   active: 0
+  timerSeconds: 3
+  realSeconds: 0
+  explosion: {fileID: 0}
+--- !u!114 &-1114375232221917088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4695635839477600991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36f1ace93d7170e46b77e300d8793aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

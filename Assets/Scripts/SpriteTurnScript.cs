@@ -20,6 +20,8 @@ public class SpriteTurnScript : MonoBehaviour
     void Start()
     {
         self = GetComponent<Transform>();
+        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
+        player = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     // Update is called once per frame
