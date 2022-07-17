@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
         [SerializeField]
         private float jumpSpeed = 0.0f;
-        private float gravity = 1f;
+        public float gravity = 1f;
         private float groundedGravity = 0.2f;
         float initialJumpVelocity;
         public float maxJumpHeight = 1.0f;

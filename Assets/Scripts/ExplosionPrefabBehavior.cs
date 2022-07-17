@@ -49,13 +49,14 @@ public class ExplosionPrefabBehavior : MonoBehaviour
                     hitboxList.Add(entity.GetComponent<Rigidbody>());
             }
             foreach(Rigidbody hitbox in hitboxList){
-                hitbox.AddExplosionForce(explosionForce * (diceModifier), transform.position, radius.radius * (diceModifier) * 5 * (1 + (diceModifier/2)), -slamDownOffset);
+                hitbox.AddExplosionForce(explosionForce * (diceModifier), transform.position, radius.radius * (1 + diceModifier/2) * 2.5f, -slamDownOffset);
             }
             GameObject i = Instantiate(explosionSprite, transform.position, new Quaternion(0.0f,0.0f,0.0f,0.0f));
             i.transform.localScale *= diceModifier * 2;
             GameObject newDice = Instantiate(newDiceObj, transform.position, transform.rotation);
+            newDice.GetComponent<Rigidbody>().velocity = Vector3.zero;
             newDice.GetComponent<Rigidbody>().AddTorque(1f, Random.Range(-2f, 2f), -1f);
-            newDice.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-4.0f, 4.0f),35.0f,Random.Range(-4.0f, 4.0f)), ForceMode.Impulse);
+            newDice.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(6.0f, 12.0f) * (diceModifier % 2 == 0 ? -1 : 1),45.0f,Random.Range(6.0f, 12.0f) * (diceModifier % 2 == 0 ? -1 : 1)), ForceMode.Impulse);
             newDice.GetComponent<PickUpBehavior>().hopping = true;
             Debug.Log(diceModifier);
             Destroy(gameObject);
