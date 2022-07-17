@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-       _player = GameObject.FindGameObjectWithTag("Player");
+       //_player = GameObject.FindGameObjectWithTag("Player");
         
         //_explosion = GameObject.FindGameObjectWithTag("Explosion");
     }
