@@ -14,19 +14,19 @@ public class PickUpBehavior : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.layer ==3){
             if (hopping){
-                rigidBody.velocity = Vector3.zero;
+                
                 rigidBody.AddForce(new Vector3(Random.Range(-2.0f, 2.0f),30.0f,Random.Range(-2.0f, 2.0f)), ForceMode.Impulse);
                 rigidBody.AddTorque(Random.Range(2f, 10f), Random.Range(2f, 10f), Random.Range(2f, 10f));
                 if (timer ==currentTimer)
                     timer --;
                 //didSubtract = true;
-            if (timer <=0){
+                if (timer <=0){
+                    Destroy(gameObject);
+                }
+            }
+        } else if (other.gameObject.layer == 6){
                 Destroy(gameObject);
             }
-            } else{
-
-            }
-        }
     }
     void Start()
     {

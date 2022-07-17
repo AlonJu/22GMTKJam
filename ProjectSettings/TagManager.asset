@@ -7,6 +7,8 @@ TagManager:
   - stage
   - Dice
   - Explosion
+  - Spawner
+  - Thrown
   layers:
   - Default
   - TransparentFX
