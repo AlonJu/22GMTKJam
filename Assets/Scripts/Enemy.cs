@@ -36,7 +36,6 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-       
     }
 
     // Update is called once per frame

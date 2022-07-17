@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6421158675243883332}
   m_Layer: 0
-  m_Name: spawnpoint1 (3)
+  m_Name: spawnpoint4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7100905713419437224}
   m_Layer: 0
-  m_Name: spawnpoint1 (2)
+  m_Name: spawnpoint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,10 +144,10 @@ MonoBehaviour:
   _enemy:
   - {fileID: 1264022238396352892, guid: 9026cdaa1b3a97845bf3b3a678299fe4, type: 3}
   _spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8357545455211406735}
+  - {fileID: 968265075937075}
+  - {fileID: 3228987162307721162}
+  - {fileID: 1631381618919631433}
   _randomSpawning: 1
   _enemyCount: 0
   _enemyCountMax: 4
