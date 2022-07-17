@@ -217,8 +217,8 @@ public class PlayerMovement : MonoBehaviour
             Vector3 forceVector = winch.rotation.eulerAngles;
             //angle = Quaternion.AngleAxis(forceVector.y, Vector3.up);
             thrownDice.GetComponent<Rigidbody>().transform.SetPositionAndRotation(position, winch.rotation);
-            thrownDice.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-2.0f, 2.0f),30.0f,Random.Range(-2.0f, 2.0f)), ForceMode.Impulse);;
-            thrownDice.GetComponent<Rigidbody>().AddTorque(Random.Range(2f, 6f), Random.Range(2f, 6f), Random.Range(2f, 6f));
+            thrownDice.GetComponent<Rigidbody>().AddForce(thrownDice.GetComponent<Rigidbody>().transform.forward * throwSpeed, ForceMode.Impulse);
+            thrownDice.GetComponent<Rigidbody>().AddTorque(0.1f, Random.Range(0.2f, 0.4f), 0.1f);
             diceRB = null;
             dice = null;
 
