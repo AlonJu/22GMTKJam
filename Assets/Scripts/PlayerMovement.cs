@@ -69,11 +69,11 @@ public class PlayerMovement : MonoBehaviour
         private Vector3 moveVector;
     void Move(float speed)
     {
-        /* goodbye beautiful code ;'(
+        
         Vector2 mInput = inputHandler.mInput;  
         moveVector = new Vector3(mInput.x * speed, moveVector.y, mInput.y * speed); // basically translate the vector2 into a vector 3 for horizontal movement  
         moveVector *= Time.deltaTime;   
-        moveVector = cam.rotation * moveVector;*/
+        moveVector = cam.rotation * moveVector;
     }
 
     #endregion
@@ -101,13 +101,13 @@ public class PlayerMovement : MonoBehaviour
         }
     void Jump(){
 
-        /*//jumping system with 5 features -- a double jump, 
+        //jumping system with 5 features -- a double jump, 
         //a vertical boost at the zenith of your jump, 
         //a boost to help you climb ledges, 
         //an airbrake, 
         //and variable jump height
         //*all of these features are optional -- let's get the basic player controller down first
-        float jInput = inputHandler.jInput;
+        bool jInput = inputHandler.jInputDown;
 
         if (rigidBody.velocity.y > 0){ // hacky jump fix
             rigidBody.AddForce(new Vector3(0,-20,0));
@@ -115,20 +115,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded==true && jumpLimit>0){
             //start the jump
-            if (jInput != 0.0f){
+            if (jInput){
                 Debug.Log(jInput);
                 rigidBody.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
                 jumpLimit--;
                 
             }
         }else {
-            if (jInput != 0.0f){
+            if (jInput){
             Debug.Log(jInput);
-            rigidBody.AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+            //rigidBody.AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
             }
             //moveVector += new Vector3(moveVector.x, 0.0f, moveVector.z);
           //moveVector.y -= (1 - jInput); //variable jump
-        }*/
+        }
 
         //rigidBody.AddForce(moveVector, ForceMode.Impulse); 
     }
@@ -232,24 +232,24 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(jumpLimit);
         //use states to control velocity based on whetehr or not youre grounded
      Move(speed);   
-     //IsGrounded();
+     IsGrounded();
      //HandleGravity();
-     //Jump();
+     Jump();
      rigidBody.AddForce(moveVector, ForceMode.Impulse); 
      if (inputHandler.left_mInput){
         Debug.Log("Click handled");
      }
-       m_playerIsGrounded = m_distanceFromPlayerToGround <= 1f;
+      /* m_playerIsGrounded = m_distanceFromPlayerToGround <= 1f;
 
             if (isJumping && m_playerJumpStarted &&
                 (m_playerIsGrounded || MaxAllowJump > m_currentNumberOfJumpsMade)) StartCoroutine(ApplyJump());
 
-            if (m_playerIsGrounded) m_currentNumberOfJumpsMade = 0;
+            if (m_playerIsGrounded) m_currentNumberOfJumpsMade = 0;*/
     }
    void Update(){
      HoldDice(currentDice);
      ClickEvent(inputHandler.left_mInput);
-     isJumping = Input.GetKeyDown(KeyCode.Space);
+     /*isJumping = Input.GetKeyDown(KeyCode.Space);
      Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * raycastDistance, Color.blue);
             //added layermask for those dealing with complex ground objects.
     if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out m_hit,
@@ -258,12 +258,12 @@ public class PlayerMovement : MonoBehaviour
                 m_groundLocation = m_hit.point;
                 m_distanceFromPlayerToGround = transform.position.y - m_groundLocation.y;
     }
-    
+    */
    }
 
 
    //dumb bullshit time lets go
-   private float m_xAxis;
+  /* private float m_xAxis;
         private float m_zAxis;
         //private Rigidbody rigidBody;
         private RaycastHit m_hit;
@@ -296,5 +296,5 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitUntil(() => !isJumping);
             ++m_currentNumberOfJumpsMade;
             m_playerJumpStarted = true;
-        }
+        }*/
 }
