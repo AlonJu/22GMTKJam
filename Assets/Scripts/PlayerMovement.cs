@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform self;
     private GameObject gBox;
     private InputHandler inputHandler;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
         inputHandler = GetComponent<InputHandler>();    
         diceP = GetComponent<DicePhysics>();
         self = GetComponent<Transform>();
-        winch = GetComponent<Transform>();
+        winch = GameObject.Find("Aiming Winch").GetComponent<Transform>();
+        SetUpJumpVars();
     }
     //Collisions
 
@@ -67,10 +69,11 @@ public class PlayerMovement : MonoBehaviour
         private Vector3 moveVector;
     void Move(float speed)
     {
+        /* goodbye beautiful code ;'(
         Vector2 mInput = inputHandler.mInput;  
         moveVector = new Vector3(mInput.x * speed, moveVector.y, mInput.y * speed); // basically translate the vector2 into a vector 3 for horizontal movement  
         moveVector *= Time.deltaTime;   
-        moveVector = cam.rotation * moveVector;
+        moveVector = cam.rotation * moveVector;*/
     }
 
     #endregion
@@ -79,10 +82,26 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
         [SerializeField]
         private float jumpSpeed = 0.0f;
+        private float gravity = 1.0f;
+        private float groundedGravity = 0.2f;
+        float initialJumpVelocity;
+        public float maxJumpHeight = 1.0f;
+        public float maxJumpTime = 0.5f;
+        bool isJumping = false;
+        bool jumpPressed = false;
+    void SetUpJumpVars(){
+        float timeToApex = maxJumpTime/2;
+        gravity = (-2 * maxJumpHeight) /Mathf.Pow(timeToApex, 2);
+        initialJumpVelocity = (2 * maxJumpHeight)/timeToApex;
+    }
         //[SerializeField]
         //private float jumpBoost = 0.0f, ledgeBoostSpeed = 0.0f, airBrake = 0.0f, airSpeed = 0.0f;
+        void HandleGravity(){
+
+        }
     void Jump(){
-        //jumping system with 5 features -- a double jump, 
+
+        /*//jumping system with 5 features -- a double jump, 
         //a vertical boost at the zenith of your jump, 
         //a boost to help you climb ledges, 
         //an airbrake, 
@@ -90,18 +109,26 @@ public class PlayerMovement : MonoBehaviour
         //*all of these features are optional -- let's get the basic player controller down first
         float jInput = inputHandler.jInput;
 
+        if (rigidBody.velocity.y > 0){ // hacky jump fix
+            rigidBody.AddForce(new Vector3(0,-20,0));
+        }
+
         if (grounded==true && jumpLimit>0){
             //start the jump
             if (jInput != 0.0f){
-                //Debug.Log(jInput);
-                moveVector += new Vector3(moveVector.x, jumpSpeed, moveVector.z);
+                Debug.Log(jInput);
+                rigidBody.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
                 jumpLimit--;
                 
             }
         }else {
-            moveVector += new Vector3(moveVector.x, 0.0f, moveVector.z);
+            if (jInput != 0.0f){
+            Debug.Log(jInput);
+            rigidBody.AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+            }
+            //moveVector += new Vector3(moveVector.x, 0.0f, moveVector.z);
           //moveVector.y -= (1 - jInput); //variable jump
-        }
+        }*/
 
         //rigidBody.AddForce(moveVector, ForceMode.Impulse); 
     }
@@ -109,15 +136,18 @@ public class PlayerMovement : MonoBehaviour
     //Dice interactions
     #region Dice
     [Header("Dice")]
-    public GameObject currentDice;
-    private Rigidbody diceRB;
+    public GameObject currentDice = null;
+    private Rigidbody diceRB = null;
 
     [Range(0.0f, 20.0f)][SerializeField]
     private float diceOffset;
+    [Range(0.0f, 30.0f)][SerializeField]
+    private float angleOffset;
     public float throwSpeed;
     private ClickRaycast clickRay;
     public DicePhysics diceP;
     public Transform winch;
+    public GrabBoxScript gbScript;
     void HoldDice(GameObject dice){
         if (dice){
             dice.transform.position = self.position + new Vector3(0.0f, diceOffset, 0.0f);
@@ -132,18 +162,28 @@ public class PlayerMovement : MonoBehaviour
         if (dice){
             //throw dice in direction of pointer
             //
+            /*
             float xAngle = CalculateDiceXAngle(targetPoint, throwSpeed, dice);
             Quaternion angleQuat = Quaternion.AngleAxis(xAngle, Vector3.right);
-            Vector3 angleVector = angleQuat.eulerAngles;
+            Vector3 angleVector = angleQuat.eulerAngles;*/
 
-            diceRB.useGravity = true;
+            Debug.Log("Dice Thrown.");
+            Vector3 angleVector = cam.rotation.eulerAngles;
+            
+            diceRB = dice.GetComponent<Rigidbody>();
             diceRB.isKinematic = false;
-            diceRB.AddForce(new Vector3(angleVector.x, cam.transform.rotation.y, 0.0f), ForceMode.Impulse);
+            diceRB.useGravity = true;
+            GameObject thrownDice = Instantiate(dice);
+            Destroy(dice);
+            //calculate the throw, then rotate it.
+            Vector3 forceVector = winch.rotation.eulerAngles;
+            thrownDice.GetComponent<Rigidbody>().velocity = forceVector * throwSpeed ;
             diceRB = null;
             dice = null;
+
         }
     }
-    public float CalculateDiceXAngle(Vector3 targetPoint, float shotSpeed, GameObject dice){
+    public float CalculateDiceXAngle(Vector3 targetPoint, float shotSpeed, GameObject dice){ //never used because its too complicated lol
         float gravity = 6.67f;
 
         float sinAngle = (gravity * Vector3.Distance(dice.transform.position, targetPoint))/(shotSpeed*shotSpeed);
@@ -151,8 +191,11 @@ public class PlayerMovement : MonoBehaviour
         return finalAngle;
     }
     void ClickEvent(bool clicked){
-        if(clicked){
-            ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
+        
+        if(clicked == true){
+            ThrowDice(Vector3.zero, currentDice);
+            Debug.Log("Click.");
+            //ClickRaycast.RayHitData rayData = new ClickRaycast.RayHitData();
             /*
             rayData = clickRay.CastReticle(1);
             if (rayData.hitLocation != Vector3.zero){
@@ -165,13 +208,13 @@ public class PlayerMovement : MonoBehaviour
             } else {
 
             }*/
-            rayData = clickRay.PickUp();
+            /*rayData = clickRay.PickUp();
             if (rayData.hitLocation != Vector3.zero){
                 Debug.Log("YES!!!!");
                 if (currentDice){
                     ThrowDice(rayData.hitLocation, currentDice);
                 }
-            }
+            }*/
         }
     }
     #endregion
@@ -184,16 +227,74 @@ public class PlayerMovement : MonoBehaviour
 
     public int maxHealth;
 
-        void FixedUpdate() 
+    void FixedUpdate() 
     {
         //Debug.Log(jumpLimit);
         //use states to control velocity based on whetehr or not youre grounded
      Move(speed);   
-     Jump();
-     IsGrounded();
-     ClickEvent(inputHandler.left_mInput);
-     HoldDice(currentDice);
+     //IsGrounded();
+     //HandleGravity();
+     //Jump();
      rigidBody.AddForce(moveVector, ForceMode.Impulse); 
+     if (inputHandler.left_mInput){
+        Debug.Log("Click handled");
+     }
+       m_playerIsGrounded = m_distanceFromPlayerToGround <= 1f;
+
+            if (isJumping && m_playerJumpStarted &&
+                (m_playerIsGrounded || MaxAllowJump > m_currentNumberOfJumpsMade)) StartCoroutine(ApplyJump());
+
+            if (m_playerIsGrounded) m_currentNumberOfJumpsMade = 0;
     }
-   
+   void Update(){
+     HoldDice(currentDice);
+     ClickEvent(inputHandler.left_mInput);
+     isJumping = Input.GetKeyDown(KeyCode.Space);
+     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * raycastDistance, Color.blue);
+            //added layermask for those dealing with complex ground objects.
+    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out m_hit,
+    raycastDistance, m_groundLayerMask))
+    {
+                m_groundLocation = m_hit.point;
+                m_distanceFromPlayerToGround = transform.position.y - m_groundLocation.y;
+    }
+    
+   }
+
+
+   //dumb bullshit time lets go
+   private float m_xAxis;
+        private float m_zAxis;
+        //private Rigidbody rigidBody;
+        private RaycastHit m_hit;
+        private Vector3 m_groundLocation;
+        //private bool m_leftShiftPressed;
+        private int m_groundLayerMask = 3;
+        private float m_distanceFromPlayerToGround;
+        private bool m_playerIsGrounded;
+        private bool m_playerJumpStarted;
+        private const int MaxAllowJump = 2; //maximum allowed jumps
+        private int m_currentNumberOfJumpsMade; //current number of jumps processed
+        public float raycastDistance;
+
+     private void PlayerJump(float jumpForce, ForceMode forceMode)
+        {
+            rigidBody.AddForce(jumpForce * rigidBody.mass * Time.deltaTime * Vector3.up, forceMode);
+        }
+
+        /// <summary>
+        /// handles single and double jump
+        /// waits until space bar pressed is terminated before
+        /// next jump is initiated.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ApplyJump()
+        {
+            PlayerJump(jumpSpeed, ForceMode.Impulse);
+            m_playerIsGrounded = false;
+            m_playerJumpStarted = false;
+            yield return new WaitUntil(() => !isJumping);
+            ++m_currentNumberOfJumpsMade;
+            m_playerJumpStarted = true;
+        }
 }
