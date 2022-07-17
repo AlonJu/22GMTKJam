@@ -40,10 +40,12 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private bool AIToggleNavMesh;
+    [SerializeField]
+    private Vector3 _enemyDistance;
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-       // _player = GameObject.FindGameObjectWithTag("Player");
+       _player = GameObject.FindGameObjectWithTag("Player");
         
         //_explosion = GameObject.FindGameObjectWithTag("Explosion");
     }
@@ -56,9 +58,13 @@ public class Enemy : MonoBehaviour
     }
     public void KnockBack()
     {
-        Instantiate(_explosion, transform.position, Quaternion.identity);
+        if (transform.position+_enemyDistance == _player.transform.position)
+        {
+         Instantiate(_explosion, transform.position, Quaternion.identity);
       
-        _explosion.SetActive(true);
+        _explosion.SetActive(true);   
+        }
+        
        // _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
         //_player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
