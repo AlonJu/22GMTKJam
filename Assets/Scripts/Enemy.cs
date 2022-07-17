@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
     }
     public void KnockBack()
     {
-        _player.AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
+        _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
     }
     public void ChasePlayer()
