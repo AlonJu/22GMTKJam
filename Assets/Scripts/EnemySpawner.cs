@@ -36,9 +36,8 @@ private int _round=0;
 
 
 
-public class EnemySpawner : MonoBehaviour
-{
-    IEnumerator Spawn()
+
+    
     public IEnumerator Spawn()
     {
         _round++;
@@ -80,9 +79,10 @@ public class EnemySpawner : MonoBehaviour
         {
             _round++;
             _enemyCountMax++;
-            StartCoroutine(Spawn());
+            StartCoroutine(Spawn()); //?
 
         }
         
     }
+    
 }
