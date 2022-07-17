@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6308301755574318990}
   - component: {fileID: 8822584724117728224}
   - component: {fileID: 983160275}
+  - component: {fileID: 1377584761}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -142,6 +143,7 @@ MonoBehaviour:
   _enemyFrequency: 0.4
   _enemyResistance: 0.42
   _enemyForce: 0.87
+  AIToggleNavMesh: 0
 --- !u!54 &983160275
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -158,3 +160,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &1377584761
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264022238396352892}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

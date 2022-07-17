@@ -1,6 +1,9 @@
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -35,11 +38,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _enemyForce;
     // Start is called before the first frame update
+    [SerializeField]
+    private bool AIToggleNavMesh;
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _player = GameObject.FindGameObjectWithTag("Player");
-        _explosion = GAMEObject.FindGameObjectWithTag("Explosion");
+       // _player = GameObject.FindGameObjectWithTag("Player");
+        
+        //_explosion = GameObject.FindGameObjectWithTag("Explosion");
     }
 
     // Update is called once per frame
@@ -51,16 +57,25 @@ public class Enemy : MonoBehaviour
     public void KnockBack()
     {
         Instantiate(_explosion, transform.position, Quaternion.identity);
+      
+        _explosion.SetActive(true);
        // _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
         //_player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
     }
     public void ChasePlayer()
     {
+        if (AIToggleNavMesh=true)
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.destination = _player.transform.position;
+        }
         
-        
+        else
+        {
         _rb.AddForce((_player.transform.position - transform.position).normalized * _enemySpeed);
         //transform.Translate(_player.transform.position - transform.position*_enemySpeed*Time.deltaTime);
         transform.LookAt(_player.transform);        
+        }
     }
 }
