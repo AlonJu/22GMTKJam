@@ -33,6 +33,9 @@ public class SpriteTurnScript : MonoBehaviour
     {
         if (billboard){
             transform.position =new Vector3(transform.position.x, originalY+ (Mathf.Sin(Time.time) * offsetBillboard), transform.position.z);
+            if(GameObject.Find("thrownDice")){
+                Destroy(gameObject);
+            }
         }
         Quaternion camRotation = cam.rotation;
         Vector3 camRotationVector = camRotation.eulerAngles;
