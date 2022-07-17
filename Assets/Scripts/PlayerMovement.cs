@@ -65,10 +65,10 @@ public class PlayerMovement : MonoBehaviour
             jumpLimit = 0;
         }
     }*/
-    private void OnDrawGizmos() {
+    /*private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(new Vector3(groundBox.center.x, groundBox.center.y - (groundBox.size.y*groundedFactor), groundBox.center.z), transform.localScale);
-    }
+    }*/
     //Horizontal Movement
     #region Running
     [Header("Horizontal Movement")][Range(0.0f,20.0f)]
