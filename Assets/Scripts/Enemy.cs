@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
     //enemy rigidbdoy
     private Rigidbody _rb;
 
+    [SerializeField]
+    private GameObject _explosion;
 
 
     //enemy
@@ -36,6 +38,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _explosion = GAMEObject.FindGameObjectWithTag("Explosion");
     }
 
     // Update is called once per frame
@@ -46,7 +50,8 @@ public class Enemy : MonoBehaviour
     }
     public void KnockBack()
     {
-        _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
+        Instantiate(_explosion, transform.position, Quaternion.identity);
+       // _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
         //_player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
     }
