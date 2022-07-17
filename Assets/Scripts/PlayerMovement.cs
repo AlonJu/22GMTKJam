@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded=false;
     private float _slopeAngle;
 
-    private int jumpLimit=2;
+    //private int jumpLimit=2;
     /*void IsGrounded(){
         if (Physics.BoxCast( new Vector3(groundBox.center.x , groundBox.center.y  , groundBox.center.z  ),
                             new Vector3((groundBox.size.x * 0.9f), groundBox.size.y, (groundBox.size.z * 0.9f)) * 0.5f,
@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
             1.0f, 3.0f
         };
         bool isJumping = false;
-        bool jumpPressed = false;
+        //bool jumpPressed = false;
     void SetUpJumpVars(){
         float timeToApex = maxJumpTime/2;
         gravity = (-2 * maxJumpHeight) /Mathf.Pow(timeToApex, 2);
@@ -176,6 +176,7 @@ public class PlayerMovement : MonoBehaviour
     public DicePhysics diceP;
     public Transform winch;
     public GrabBoxScript gbScript;
+    public GameObject thrownDicePrefab;
 
     public bool holding = false;
     void HoldDice(GameObject dice){
@@ -206,11 +207,17 @@ public class PlayerMovement : MonoBehaviour
             diceRB = dice.GetComponent<Rigidbody>();
             diceRB.isKinematic = false;
             diceRB.useGravity = true;
-            GameObject thrownDice = Instantiate(dice);
+            Vector3 position = dice.transform.position;
+            Quaternion angle = Quaternion.LookRotation(dice.transform.forward, Vector3.up);
+            angle *= dice.transform.rotation;
+            
             Destroy(dice);
+            GameObject thrownDice = Instantiate(thrownDicePrefab);
             //calculate the throw, then rotate it.
             Vector3 forceVector = winch.rotation.eulerAngles;
-            thrownDice.GetComponent<Rigidbody>().velocity = forceVector * throwSpeed ;
+            //angle = Quaternion.AngleAxis(forceVector.y, Vector3.up);
+            thrownDice.GetComponent<Rigidbody>().transform.SetPositionAndRotation(position, winch.rotation);
+            thrownDice.GetComponent<Rigidbody>().AddForce(thrownDice.GetComponent<Rigidbody>().transform.forward * throwSpeed, ForceMode.Impulse);
             diceRB = null;
             dice = null;
 
