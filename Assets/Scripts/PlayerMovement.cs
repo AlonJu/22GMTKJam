@@ -264,9 +264,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform cam;
     //Utilities
     [Header("Misc.")]
-    public int health;
+    public int health = 3;
 
-    public int maxHealth;
+    public int maxHealth = 3;
 
     void FixedUpdate() 
     {

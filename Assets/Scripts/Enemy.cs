@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     // will be used to chase or target player
     [SerializeField]
-    private GameObject _player;
+    GameObject _player;
 
     //enemy rigidbdoy
     private Rigidbody _rb;
@@ -40,12 +40,22 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private bool AIToggleNavMesh;
+
+    void Awake(){
+        _player = GameObject.Find("Player");
+    }
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
        // _player = GameObject.FindGameObjectWithTag("Player");
         
         //_explosion = GameObject.FindGameObjectWithTag("Explosion");
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Explosion"){
+            //whatever you want
+        }
     }
 
     // Update is called once per frame
