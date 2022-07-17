@@ -6,6 +6,7 @@ TagManager:
   tags:
   - stage
   - Dice
+  - Explosion
   layers:
   - Default
   - TransparentFX
