@@ -36,7 +36,7 @@ private int _round=0;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public IEnumerator Spawn()
+    IEnumerator Spawn()
     {
         round++;
         while (_enemyCount <  _enemyCountMax)
