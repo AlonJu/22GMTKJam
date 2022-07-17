@@ -30,13 +30,10 @@ private float _spawnTime;
 
 [SerializeField]
 private int _round=0;
-<<<<<<< HEAD
 
-    IEnumerator Spawn()
-=======
+
     
     public IEnumerator Spawn()
->>>>>>> a3bb3f242fa126fa929c7bad21ea2314c8c393e4
     {
         _round++;
         while (_enemyCount <  _enemyCountMax)
