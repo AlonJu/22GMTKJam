@@ -71,13 +71,13 @@ public class Enemy : MonoBehaviour
     }
     public void ChasePlayer()
     {
-        if (AIToggleNavMesh=true)
+        if (AIToggleNavMesh == true)
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.destination = _player.transform.position;
         }
         
-        else
+        else // this should be a lunge attack of sorts -- make it so that when they are within a certain distance of the player, they lunge
         {
         _rb.AddForce((_player.transform.position - transform.position).normalized * _enemySpeed);
         //transform.Translate(_player.transform.position - transform.position*_enemySpeed*Time.deltaTime);

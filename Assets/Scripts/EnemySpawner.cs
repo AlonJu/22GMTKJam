@@ -22,6 +22,8 @@ private bool _randomSpawning;
 [SerializeField]
 private int _enemyCount=0;
 [SerializeField]
+private bool _enemyCluster;
+[SerializeField]
 private int _enemyCountMax=4;
 
 //delay between spawns
@@ -44,8 +46,13 @@ private int _round=0;
             if (_randomSpawning)
             {
                 int randomIndex = Random.Range(0, _spawnPoints.Length);
+                int clusterNum = 1;
+                if(_enemyCluster)
+                    clusterNum = Random.Range(3, 10);
+                for(int x = clusterNum; x > 0; x--){
                 Instantiate(_enemy[i], _spawnPoints[randomIndex].transform.position, Quaternion.identity);
                 _enemyCount++;
+                }
             }
             //ordered spawn
             else
