@@ -41,13 +41,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        KnockBack();
+        ChasePlayer();
     }
     public void KnockBack()
     {
         _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
-        _player.GetComponent<PlayerController>().LoseHealth(_enemyDamage);
+       // _player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
     }
     public void ChasePlayer()
     {
