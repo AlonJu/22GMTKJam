@@ -1,3 +1,5 @@
+
+using System.Threading.Tasks.Dataflow;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +22,9 @@ public class Enemy : MonoBehaviour
     //enemy health
     [SerializeField]
     private int _enemyHealth;
+    //enemy damage
+    [SerializeField]
+    private int _enemyDamage;
     //enemy frequency
     [SerializeField]
     private float _enemyFrequency;
@@ -31,6 +36,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _rb = GetComponent<Rigidbody>();
         _player = GetComponent<GameObject>();
     }
 
@@ -43,11 +49,14 @@ public class Enemy : MonoBehaviour
     {
         _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
+        _player.GetComponent<PlayerController>().LoseHealth(_enemyDamage);
     }
     public void ChasePlayer()
     {
         
-        _rb = GetComponent<Rigidbody>();
+        
         _rb.AddForce((_player.transform.position - transform.position).normalized * _enemySpeed);
+        //transform.Translate(_player.transform.position - transform.position*_enemySpeed*Time.deltaTime);
+        transform.LookAt(_player.transform);        
     }
 }
