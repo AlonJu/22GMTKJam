@@ -16,6 +16,8 @@ public class GrabBoxScript : MonoBehaviour
     [SerializeField]
     private float rotationGuideAmount = 0.1f;
 
+    public bool active = true;
+
     void Start()
     {
         self = GetComponent<Transform>();
@@ -40,9 +42,10 @@ public class GrabBoxScript : MonoBehaviour
 
     }
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Dice"){
+        if (other.gameObject.tag == "Dice" && active){
             //player will pick it up.
             playerMovement.currentDice = other.gameObject;
+            //active = false;
         }
     }
 }

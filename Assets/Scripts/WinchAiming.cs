@@ -30,15 +30,15 @@ public class WinchAiming : MonoBehaviour
 
     
 
-     self.Rotate(Input.GetAxisRaw("Mouse Y") * winchSpeed, 0.0f, 0.0f);   
+     self.rotation = Quaternion.Euler(0.5f, 0.0f, 0.0f);   
      Quaternion  selfRotation = self.rotation;
      Vector3 selfRotationVector = selfRotation.eulerAngles;
-     self.rotation = Quaternion.Euler(new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z));
+     self.rotation = Quaternion.Euler(new Vector3(selfRotationVector.x-45f, camRotationVector.y, selfRotationVector.z));
      self.position = player.position;
 
      Vector3 line = self.position + ( self.forward * 100.0f);
      Vector3 rotatedLine = Quaternion.AngleAxis(self.rotation.x, transform.right ) * Quaternion.AngleAxis(self.rotation.y, transform.up ) * line;
-
+     //self.rotation = Quaternion.Euler(rotatedLine);
 
      //i want to rotate this line aroudn the x and y axis
      Debug.DrawLine(transform.position, rotatedLine, Color.blue);
