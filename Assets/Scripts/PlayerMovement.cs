@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     private Transform self;
     private GameObject gBox;
     private InputHandler inputHandler;
+    GMTKJam controls;
     
     // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
+        controls = new GMTKJam();
+        
         rigidBody = GetComponent<Rigidbody>();
         hitbox = GetComponent<CapsuleCollider>();  
         //groundBox = GetComponent<BoxCollider>(); 
@@ -19,6 +23,13 @@ public class PlayerMovement : MonoBehaviour
         self = GetComponent<Transform>();
         winch = GameObject.Find("Aiming Winch").GetComponent<Transform>();
         SetUpJumpVars();
+        rigidBody.freezeRotation = true;
+    }
+    private void OnEnable(){
+        controls.Player.Enable();
+    }
+    private void OnDisable(){
+        controls.Player.Disable();
     }
     //Collisions
 
@@ -34,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private float _slopeAngle;
 
     private int jumpLimit=2;
-    void IsGrounded(){
+    /*void IsGrounded(){
         if (Physics.BoxCast( new Vector3(groundBox.center.x , groundBox.center.y  , groundBox.center.z  ),
                             new Vector3((groundBox.size.x * 0.9f), groundBox.size.y, (groundBox.size.z * 0.9f)) * 0.5f,
                             -Vector3.up,
@@ -53,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
             grounded = false;
             jumpLimit = 0;
         }
-    }
+    }*/
     private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(new Vector3(groundBox.center.x, groundBox.center.y - (groundBox.size.y*groundedFactor), groundBox.center.z), transform.localScale);
@@ -70,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
     void Move(float speed)
     {
         
-        Vector2 mInput = inputHandler.mInput;  
+        Vector2 mInput = controls.Player.Move.ReadValue<Vector2>();  
         moveVector = new Vector3(mInput.x * speed, moveVector.y, mInput.y * speed); // basically translate the vector2 into a vector 3 for horizontal movement  
         moveVector *= Time.deltaTime;   
         moveVector = cam.rotation * moveVector;
@@ -82,11 +93,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
         [SerializeField]
         private float jumpSpeed = 0.0f;
-        private float gravity = 1.0f;
+        private float gravity = 1f;
         private float groundedGravity = 0.2f;
         float initialJumpVelocity;
         public float maxJumpHeight = 1.0f;
         public float maxJumpTime = 0.5f;
+        float[] gravRange = new float[]{
+            1.0f, 3.0f
+        };
         bool isJumping = false;
         bool jumpPressed = false;
     void SetUpJumpVars(){
@@ -100,17 +114,31 @@ public class PlayerMovement : MonoBehaviour
 
         }
     void Jump(){
-
+        float jInput = controls.Player.Jump.ReadValue<float>();
         //jumping system with 5 features -- a double jump, 
         //a vertical boost at the zenith of your jump, 
         //a boost to help you climb ledges, 
         //an airbrake, 
         //and variable jump height
         //*all of these features are optional -- let's get the basic player controller down first
-        bool jInput = inputHandler.jInputDown;
-
+        
+        if (grounded){
+            if(jInput != 0.0f){
+                Debug.Log("Yay.");
+                rigidBody.AddForce(new Vector3(0,jumpSpeed,0), ForceMode.Impulse);
+            }
+            //rigidBody.mass = 0.1f;
+            gravity = gravRange[0];
+            rigidBody.AddForce(new Vector3(0,groundedGravity,0));
+        }else{
+            //rigidBody.mass *= 1.1f;
+            if (gravity < gravRange[1])
+                gravity -= 0.1f;
+            rigidBody.AddForce(new Vector3(0,gravity,0));
+        }
+/*
         if (rigidBody.velocity.y > 0){ // hacky jump fix
-            rigidBody.AddForce(new Vector3(0,-20,0));
+           // rigidBody.AddForce(new Vector3(0,-20,0));
         }
 
         if (grounded==true && jumpLimit>0){
@@ -128,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
             }
             //moveVector += new Vector3(moveVector.x, 0.0f, moveVector.z);
           //moveVector.y -= (1 - jInput); //variable jump
-        }
+        }*/
 
         //rigidBody.AddForce(moveVector, ForceMode.Impulse); 
     }
@@ -232,10 +260,17 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(jumpLimit);
         //use states to control velocity based on whetehr or not youre grounded
      Move(speed);   
-     IsGrounded();
+     //IsGrounded();
      //HandleGravity();
      Jump();
-     rigidBody.AddForce(moveVector, ForceMode.Impulse); 
+
+     rigidBody.AddForce(moveVector * speed, ForceMode.Impulse);
+     Vector3 camRotationVector = cam.rotation.eulerAngles;  
+     Quaternion  selfRotation = self.rotation;
+     Vector3 selfRotationVector = selfRotation.eulerAngles;
+     rigidBody.rotation = Quaternion.Euler(new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z));
+     
+    //rigidBody.velocity = moveVector * speed;
      if (inputHandler.left_mInput){
         Debug.Log("Click handled");
      }
