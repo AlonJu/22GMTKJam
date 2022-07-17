@@ -52,7 +52,7 @@ public class ExplosionPrefabBehavior : MonoBehaviour
                 hitbox.AddExplosionForce(explosionForce * (diceModifier), transform.position, radius.radius *  diceModifier * 2.5f, -slamDownOffset);
             }
             GameObject i = Instantiate(explosionSprite, transform.position, new Quaternion(0.0f,0.0f,0.0f,0.0f));
-            i.transform.localScale *= diceModifier * 2;
+            i.transform.localScale *= (1 + (diceModifier/10)) * 2;
             GameObject newDice = Instantiate(newDiceObj, transform.position, transform.rotation);
             newDice.GetComponent<Rigidbody>().velocity = Vector3.zero;
             newDice.GetComponent<Rigidbody>().AddTorque(60f, Random.Range(-180f, 180f), -60f, ForceMode.Impulse);

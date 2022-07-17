@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +38,12 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private bool AIToggleNavMesh;
+    private float attackTimer = 10.0f;
+    public float attackTimerInit = 10.0f;
+    public float walkMaxTimeInit = 3.0f;
+    private float walkMaxTime = 3.0f;
+    public int walking = 0;
+    private Vector3 _enemyDistance;
 
     void Awake(){
         _player = GameObject.Find("Player");
@@ -62,12 +66,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        KnockBack();
-        ChasePlayer();
+        Attacar();
+        if (walking == 1){
+            WalkBackAndForth(Random.Range(0,1) == 1 ? Vector3.right : Vector3.forward);
+        }
     }
     public void KnockBack()
     {
-        if (transform.position+_enemyDistance == _player.transform.position)
+        if (transform.position+ _enemyDistance == _player.transform.position)
         {
          Instantiate(_explosion, transform.position, Quaternion.identity);
       
@@ -78,6 +84,34 @@ public class Enemy : MonoBehaviour
         //player  lose health
         //_player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
     }
+
+    //attack
+    void Attacar(){
+        transform.LookAt(_player.transform); 
+        attackTimer -= Time.deltaTime;
+        if(attackTimer <=0){
+            //attack for real
+            AttackPlayer(_player.transform);
+            attackTimer = attackTimerInit;
+            walking = Random.Range(0, 1);
+        }
+        
+    }
+    public GameObject bullet;
+
+    void AttackPlayer(Transform player){
+        Instantiate(bullet, transform.position, transform.rotation);
+    }
+
+    void WalkBackAndForth(Vector3 direction){
+        walkMaxTime--;
+        if (walkMaxTime <=0){
+        _rb.AddForce(-direction);
+        } else{
+        _rb.AddForce(direction);
+        }
+    }
+
     public void ChasePlayer()
     {
         if (AIToggleNavMesh == true)

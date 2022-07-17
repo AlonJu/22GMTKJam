@@ -13,6 +13,7 @@ public class SpriteTurnScript : MonoBehaviour
     public bool playerSprite = false;
     public bool healthBar = false;
     public bool billboard = false;
+    public bool nonTurning = false;
     public int whoAmI;
     [Range(0.0f, 20.0f)]
     public float offset = 0.0f;
@@ -54,13 +55,13 @@ public class SpriteTurnScript : MonoBehaviour
 
         Quaternion  selfRotation = self.rotation;
         Vector3 selfRotationVector = selfRotation.eulerAngles;
-        if (!playerSprite){
-           /* if (self.position.y < player.position.y){
+        if (!playerSprite || !nonTurning){
+            if (self.position.y < player.position.y){
                 float rotationGuide = Vector3.Angle(self.position, player.position);
                 selfRotationVector = new Vector3(selfRotationVector.x + rotationGuide * rotationGuideAmount, camRotationVector.y, selfRotationVector.z);
             } else{
                 selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);
-            }*/
+            }
         self.SetPositionAndRotation(self.position, Quaternion.Euler(selfRotationVector));
         }else {
             selfRotationVector = new Vector3(selfRotationVector.x, camRotationVector.y, selfRotationVector.z);

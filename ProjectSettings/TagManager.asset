@@ -10,6 +10,7 @@ TagManager:
   - Spawner
   - Thrown
   - enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX

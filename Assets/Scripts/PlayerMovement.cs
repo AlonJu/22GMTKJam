@@ -32,7 +32,13 @@ public class PlayerMovement : MonoBehaviour
         controls.Player.Disable();
     }
     //Collisions
+    private void OnCollisionEnter(Collision other) {
+        if (other.gameObject.tag == "Bullet"){
+            Destroy(other.gameObject);
+            health--;
 
+        }
+    }
     public Rigidbody rigidBody;
     private CapsuleCollider hitbox;
     [SerializeField]
@@ -294,9 +300,25 @@ public class PlayerMovement : MonoBehaviour
 
             if (m_playerIsGrounded) m_currentNumberOfJumpsMade = 0;*/
     }
+    public GameObject gmBG;
+    public GameObject gmText;
+    void Die(){
+        //spawn game over screen and prompt r to restart;
+        if (health <=0){
+        gmBG.GetComponent<SpriteRenderer>().enabled =true;
+        gmText.GetComponent<SpriteRenderer>().enabled = true;
+        if (Input.GetKeyDown("R")){
+            Application.LoadLevel(Application.loadedLevel);
+            
+        }
+        }
+    }
    void Update(){
      HoldDice(currentDice);
      ClickEvent(inputHandler.left_mInput);
+     if (health <= 0){
+        Die();
+     }
      /*isJumping = Input.GetKeyDown(KeyCode.Space);
      Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * raycastDistance, Color.blue);
             //added layermask for those dealing with complex ground objects.

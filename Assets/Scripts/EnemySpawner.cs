@@ -24,7 +24,7 @@ private int _enemyCount=0;
 [SerializeField]
 private bool _enemyCluster;
 [SerializeField]
-private int _enemyCountMax=4;
+private int _enemyCountMax=50;
 
 //delay between spawns
 [SerializeField]
@@ -32,6 +32,7 @@ private float _spawnTime;
 
 [SerializeField]
 private int _round=0;
+public bool roundStarted;
 
 
     
@@ -77,7 +78,7 @@ private int _round=0;
     // Update is called once per frame
     void Update()
     {
-        if (_enemyCount <1)
+        if (_enemyCount <1 && roundStarted)
         {
             _round++;
             _enemyCountMax++;
