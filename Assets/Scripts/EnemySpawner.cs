@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemySpawner : MonoBehaviour
 {
     //enemy spawner script
@@ -29,8 +30,13 @@ private float _spawnTime;
 
 [SerializeField]
 private int _round=0;
+<<<<<<< HEAD
 
     IEnumerator Spawn()
+=======
+    
+    public IEnumerator Spawn()
+>>>>>>> a3bb3f242fa126fa929c7bad21ea2314c8c393e4
     {
         _round++;
         while (_enemyCount <  _enemyCountMax)
@@ -71,7 +77,7 @@ private int _round=0;
         {
             _round++;
             _enemyCountMax++;
-            StartCoroutine(Spawn());
+            StartCoroutine(Spawn()); //?
 
         }
         

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform self;
     private GameObject gBox;
     private InputHandler inputHandler;
-    GMTKJam controls;
+    public GMTKJam controls;
     
     // Start is called before the first frame update
 
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
     #region Running
     [Header("Horizontal Movement")][Range(0.0f,20.0f)]
         [SerializeField]
-        private float speed = 0.0f;
+        public float speed = 0.0f;
         public float turnFastTime = 1.0f;
         public float targetAngle;
         float angle;
@@ -176,6 +176,8 @@ public class PlayerMovement : MonoBehaviour
     public DicePhysics diceP;
     public Transform winch;
     public GrabBoxScript gbScript;
+
+    public bool holding = false;
     void HoldDice(GameObject dice){
         if (dice){
             dice.transform.position = self.position + new Vector3(0.0f, diceOffset, 0.0f);
@@ -184,6 +186,9 @@ public class PlayerMovement : MonoBehaviour
             diceRB.isKinematic = true;
             Vector3 _camRot = cam.transform.rotation.eulerAngles;
             dice.transform.rotation = Quaternion.Euler(new Vector3(0.0f, _camRot.y, 0.0f));
+            holding = true;
+        } else{
+            holding = false;
         }
     }
     void ThrowDice(Vector3 targetPoint, GameObject dice){
