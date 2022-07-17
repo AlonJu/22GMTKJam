@@ -6,7 +6,9 @@ public class Dice_Peanut : MonoBehaviour
 {
    
     public Transform self; 
+    public string diceType = "White";
     public int sideIndex;
+    public int returnNumber;
     float[] angles = new float[6];
     // Start is called before the first frame update
     void Start()
@@ -18,8 +20,27 @@ public class Dice_Peanut : MonoBehaviour
     void Update()
     {
         CheckSides();
+        returnNumber = finalNumber(sideIndex);
     }
-
+    public int finalNumber(int sIndex){
+        switch(diceType){
+            case "Red":
+            if (sideIndex % 2 == 0){
+                return sideIndex;
+            } else{
+                return 0;
+            }
+            case "Black":
+            if (sideIndex > 3){
+                return 6;
+            } else{
+                return 3;
+            }
+            case "White":
+            return sideIndex;
+        }
+        return 0;
+    }
     public int CheckSides() // calculates which side is closest to up, and then returns it's index
     {
         

@@ -17,7 +17,9 @@ public class GroundCheck : MonoBehaviour
         if (other.gameObject.layer == 3){
             player.grounded = true;
             //Debug.Log("Grounded.");
-        } else {
+        } else if (other.gameObject.layer == 6) {
+            player.gravity = 0.0f;
+            player.rigidBody.AddForce(new Vector3(Random.Range(1.0f, 2.0f) * (Random.Range(1, 2) % 2 == 0 ? -1 : 1),10.0f,Random.Range(1.0f, 2.0f) * (Random.Range(1, 2) % 2 == 0 ? -1 : 1)), ForceMode.Impulse);
             
         }
     }

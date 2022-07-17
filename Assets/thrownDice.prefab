@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4695635839477600991}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -835688487210165693, guid: f08c255f8d7777b4896bf0764a818151, type: 3}
 --- !u!23 &4695635839477600987
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: -6478536213147159724, guid: 384227b6a37d8474c9c691cbd6475b34, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   self: {fileID: 4695635839477600985}
+  diceType: White
   sideIndex: 0
+  returnNumber: 0
 --- !u!114 &4695635839477600989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,7 +142,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.1
   m_Drag: 0.5
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -158,4 +160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df2aa81e09c1304882b070c17897223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  diceIndex: {fileID: 0}
   active: 0
+  timerSeconds: 3
+  realSeconds: 0
+  explosion: {fileID: 5310306082805150596, guid: 645623fa095a8124a93ff1a4195a59fd,
+    type: 3}

@@ -8,12 +8,14 @@ public class ExplosionPrefabBehavior : MonoBehaviour
     //on enable will start a 1 frame timer to then 
     //explode them, instantiate the explosion sprite, and then kill this one in the late update
     // Start is called before the first frame update
-    int frameTimer = 2;
+    int frameTimer = 5;
     List<Collider> entityList = new List<Collider>();
     List<Rigidbody> hitboxList = new List<Rigidbody>();
     
     SphereCollider radius;
     public GameObject explosionSprite;
+    public GameObject newDiceObj;
+    public float diceModifier;
     public float explosionForce;
     public float slamDownOffset;
     private void OnTriggerStay(Collider other) {
@@ -26,6 +28,7 @@ public class ExplosionPrefabBehavior : MonoBehaviour
     }
     private void OnEnable() {
         radius = GetComponent<SphereCollider>();
+        //explosionSprite = (GameObject) Resources.Load("Assets/Explosion Sprite.prefab");
     }
     void Start()
     {
@@ -33,16 +36,32 @@ public class ExplosionPrefabBehavior : MonoBehaviour
     }
 
     // Update is called once per frame
+    void update(){
+        if(frameTimer <= 0){
+            Destroy(gameObject);
+        }
+    }
     void LateUpdate()
     {
-        foreach(Collider entity in entityList){
-            if (entity.GetComponent<Rigidbody>())
-                hitboxList.Add(entity.GetComponent<Rigidbody>());
+        if ( frameTimer == 0){
+            foreach(Collider entity in entityList){
+                if (entity.GetComponent<Rigidbody>())
+                    hitboxList.Add(entity.GetComponent<Rigidbody>());
+            }
+            foreach(Rigidbody hitbox in hitboxList){
+                hitbox.AddExplosionForce(explosionForce * (diceModifier), transform.position, radius.radius * (1 + diceModifier/2) * 2.5f, -slamDownOffset);
+            }
+            GameObject i = Instantiate(explosionSprite, transform.position, new Quaternion(0.0f,0.0f,0.0f,0.0f));
+            i.transform.localScale *= diceModifier * 2;
+            GameObject newDice = Instantiate(newDiceObj, transform.position, transform.rotation);
+            newDice.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            newDice.GetComponent<Rigidbody>().AddTorque(1f, Random.Range(-2f, 2f), -1f);
+            newDice.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(6.0f, 12.0f) * (diceModifier % 2 == 0 ? -1 : 1),45.0f,Random.Range(6.0f, 12.0f) * (diceModifier % 2 == 0 ? -1 : 1)), ForceMode.Impulse);
+            newDice.GetComponent<PickUpBehavior>().hopping = true;
+            Debug.Log(diceModifier);
+            Destroy(gameObject);
+        } else{
+            frameTimer--;
         }
-        foreach(Rigidbody hitbox in hitboxList){
-            hitbox.AddExplosionForce(explosionForce, transform.position, radius.radius, -slamDownOffset);
-        }
-        Instantiate(explosionSprite, transform.position, new Quaternion(0.0f,0.0f,0.0f,0.0f));
-        Destroy(transform.gameObject);
     }
 }

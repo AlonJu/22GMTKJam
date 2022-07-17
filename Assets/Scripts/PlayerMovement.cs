@@ -65,10 +65,10 @@ public class PlayerMovement : MonoBehaviour
             jumpLimit = 0;
         }
     }*/
-    private void OnDrawGizmos() {
+    /*private void OnDrawGizmos() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(new Vector3(groundBox.center.x, groundBox.center.y - (groundBox.size.y*groundedFactor), groundBox.center.z), transform.localScale);
-    }
+    }*/
     //Horizontal Movement
     #region Running
     [Header("Horizontal Movement")][Range(0.0f,20.0f)]
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
         [SerializeField]
         private float jumpSpeed = 0.0f;
-        private float gravity = 1f;
+        public float gravity = 1f;
         private float groundedGravity = 0.2f;
         float initialJumpVelocity;
         public float maxJumpHeight = 1.0f;
@@ -218,6 +218,7 @@ public class PlayerMovement : MonoBehaviour
             //angle = Quaternion.AngleAxis(forceVector.y, Vector3.up);
             thrownDice.GetComponent<Rigidbody>().transform.SetPositionAndRotation(position, winch.rotation);
             thrownDice.GetComponent<Rigidbody>().AddForce(thrownDice.GetComponent<Rigidbody>().transform.forward * throwSpeed, ForceMode.Impulse);
+            thrownDice.GetComponent<Rigidbody>().AddTorque(0.1f, Random.Range(0.2f, 0.4f), 0.1f);
             diceRB = null;
             dice = null;
 
