@@ -12,7 +12,7 @@ public class PlayerAnimationController : MonoBehaviour
     private bool dice;
     public int state;
 
-    private bool grounded, locked, landed;
+    private bool jumping, locked, landed;
 
     void Awake()
     {
@@ -35,6 +35,11 @@ public class PlayerAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerMovement.grounded){
+            jumping = false;
+        } else{
+            jumping = true;
+        }
         if (playerMovement.holding){
             dice = true;
         }else{
@@ -43,10 +48,10 @@ public class PlayerAnimationController : MonoBehaviour
         Vector2 moveInput = playerMovement.controls.Player.Move.ReadValue<Vector2>();
 
         state = dumbPersonMethod(moveInput);
-        grounded = playerMovement.grounded;
         //le ebin state machine  
     anim.SetBool("Dice", dice);
     anim.SetInteger("State", state);
+    anim.SetBool("Jumping", jumping);
 
     }
     private int dumbPersonMethod(Vector2 vector){
@@ -77,6 +82,7 @@ public class PlayerAnimationController : MonoBehaviour
     private static readonly int dJump = Animator.StringToHash("DiceRunRight");
     private static readonly int dFall = Animator.StringToHash("DiceRunFwd");
     private static readonly int dLand = Animator.StringToHash("DiceRunBack");
+    private static readonly int dJump2 = Animator.StringToHash("DiceJump");
 
     
 }
