@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class EnemySpawner : MonoBehaviour
 {
     //enemy spawner script
@@ -30,10 +29,6 @@ private float _spawnTime;
 
 [SerializeField]
 private int _round=0;
-
-
-
-
 
     IEnumerator Spawn()
     {
