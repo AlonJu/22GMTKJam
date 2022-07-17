@@ -44,10 +44,11 @@ public class Enemy : MonoBehaviour
     void Awake(){
         _player = GameObject.Find("Player");
     }
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-       // _player = GameObject.FindGameObjectWithTag("Player");
+       _player = GameObject.FindGameObjectWithTag("Player");
         
         //_explosion = GameObject.FindGameObjectWithTag("Explosion");
     }
@@ -66,9 +67,13 @@ public class Enemy : MonoBehaviour
     }
     public void KnockBack()
     {
-        Instantiate(_explosion, transform.position, Quaternion.identity);
+        if (transform.position+_enemyDistance == _player.transform.position)
+        {
+         Instantiate(_explosion, transform.position, Quaternion.identity);
       
-        _explosion.SetActive(true);
+        _explosion.SetActive(true);   
+        }
+        
        // _player.GetComponent<Rigidbody>().AddForce(-transform.forward * _enemySpeed, ForceMode.Impulse);
         //player  lose health
         //_player.GetComponent<PlayerMovement>().LoseHealth(_enemyDamage);
