@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     // will be used to chase or target player
+    [SerializeField]
     private GameObject _player;
 
     //enemy rigidbdoy
@@ -35,7 +36,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _player = GetComponent<GameObject>();
+       
     }
 
     // Update is called once per frame
